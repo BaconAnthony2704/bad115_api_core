@@ -1,4 +1,5 @@
 ﻿using bad115_api_core.Models;
+using bad115_api_core.Models.DTO;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,8 @@ namespace bad115_api_core.Repository
 			}
 		}
 
+		
+
 
 		public async Task Guardar(DetallerequisicionModel model)
 		{
@@ -44,6 +47,7 @@ namespace bad115_api_core.Repository
 				using (SqlCommand cmd = new SqlCommand("spDetallerequisicion_guardar", sql))
 				{
 					cmd.CommandType = System.Data.CommandType.StoredProcedure;
+					cmd.Parameters.Add(new SqlParameter("@p_IDDETALLEREQUISICION", model.Iddetallerequisicion));
 					cmd.Parameters.Add(new SqlParameter("@p_CANTIDAD", model.Cantidad));
 					cmd.Parameters.Add(new SqlParameter("@p_ESTADO", model.Estado));
 					cmd.Parameters.Add(new SqlParameter("@p_ID_PRODUCTO", model.Id_producto));
@@ -65,6 +69,8 @@ namespace bad115_api_core.Repository
 				Idrequisicion = Convert.ToInt32(reader["IDREQUISICION"])
 			};
 		}
+
+		
 	}
 
 }
