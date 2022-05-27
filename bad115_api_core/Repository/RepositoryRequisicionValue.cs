@@ -120,7 +120,8 @@ namespace bad115_api_core.Repository
 				Nombre_sucursal= Convert.ToString(reader["NOMBRE_SUCURSAL"]),
 				Pais= Convert.ToString(reader["PAIS"]),
 				Precio_minimo= Convert.ToDouble(reader["PRECIO_MINIMO"]),
-				UsuarioEncargado= Convert.ToString(reader["USUARIOENCARGADO"])
+				UsuarioEncargado= Convert.ToString(reader["USUARIOENCARGADO"]),
+				Cantidad= Convert.ToInt32(reader["CANTIDAD"])
 
 			};
 		}
