@@ -1,4 +1,5 @@
 ﻿using bad115_api_core.Models;
+using bad115_api_core.Models.DTO;
 using bad115_api_core.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +23,28 @@ namespace bad115_api_core.Controllers
 			return await _repo.Obtener(model);
 		}
 		[HttpPost("[action]")]
-		public async Task Guardar([FromBody] RequisicionModel model)
+		public async Task<List<RequisicionModel>> Guardar([FromBody] RequisicionModel model)
 		{
-			await _repo.Guardar(model);
+			return await _repo.Guardar(model);
 		}
+
+
+		[HttpPost("[action]")]
+		public async Task GuardarRequesicionUDetalle([FromBody] RequisicionUDetalleModel model)
+		{
+			 await _repo.GuardarRequisicionUDetalle(model);
+		}
+
+		[HttpPost("[action]")]
+		public async Task<List<DTORequisicionProducto>> ObtenerRequisicionProducto([FromBody] IdentificadorModel model = default)
+		{
+			return await _repo.ObtenerRequisicionProducto(model);
+		}
+
+
+
+
+
 
 	}
 }
