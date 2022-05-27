@@ -17,11 +17,14 @@ namespace bad115_api_core.Controllers
 			_repo = repository;
 		}
 		[HttpPost("[action]")]
+
+		//obtener para mostrar los datos
 		public async Task<List<SucursalModel>> Obtener([FromBody] IdentificadorModel model = default)
 		{
 			return await _repo.Obtener(model);
 		}
 		[HttpPost("[action]")]
+		//guardar los datos
 		public async Task Guardar([FromBody] SucursalModel model)
 		{
 			await _repo.Guardar(model);

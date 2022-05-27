@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Anthony\\source\\repos\\bad115_api_core\\bad115_api_core\\bad115_api_core.csproj": {}
+    "C:\\Users\\DELL\\Source\\Repos\\bad115_api_core\\bad115_api_core\\bad115_api_core.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Anthony\\source\\repos\\bad115_api_core\\bad115_api_core\\bad115_api_core.csproj": {
+    "C:\\Users\\DELL\\Source\\Repos\\bad115_api_core\\bad115_api_core\\bad115_api_core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Anthony\\source\\repos\\bad115_api_core\\bad115_api_core\\bad115_api_core.csproj",
+        "projectUniqueName": "C:\\Users\\DELL\\Source\\Repos\\bad115_api_core\\bad115_api_core\\bad115_api_core.csproj",
         "projectName": "bad115_api_core",
-        "projectPath": "C:\\Users\\Anthony\\source\\repos\\bad115_api_core\\bad115_api_core\\bad115_api_core.csproj",
-        "packagesPath": "C:\\Users\\Anthony\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Anthony\\source\\repos\\bad115_api_core\\bad115_api_core\\obj\\",
+        "projectPath": "C:\\Users\\DELL\\Source\\Repos\\bad115_api_core\\bad115_api_core\\bad115_api_core.csproj",
+        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\DELL\\Source\\Repos\\bad115_api_core\\bad115_api_core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Anthony\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -71,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     }

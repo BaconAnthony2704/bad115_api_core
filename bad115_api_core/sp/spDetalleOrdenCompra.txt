@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE spDetalle_orden_compra_ver
+﻿CREATE or replace PROCEDURE spDetalle_orden_compra_ver
 @p_id AS BIGINT=NULL
 AS
 BEGIN
@@ -8,7 +8,7 @@ BEGIN
 		SELECT * FROM DETALLE_ORDEN_COMPRA
 END
 
-CREATE PROCEDURE spDetalle_orden_compra_guardar
+CREATE or replace PROCEDURE spDetalle_orden_compra_guardar
 	@p_ACTIVO AS BIT      ,
 	@p_CANTIDAD AS DECIMAL      ,
 	@p_FECHA_CREACION AS DATETIME      ,
