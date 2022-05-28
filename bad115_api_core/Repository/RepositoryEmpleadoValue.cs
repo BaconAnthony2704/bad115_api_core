@@ -1,4 +1,5 @@
 ﻿using bad115_api_core.Models;
+using bad115_api_core.Models.DTO;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace bad115_api_core.Repository
 		{
 			_connectionString = configuration.GetConnectionString("Conexion");
 		}
-		public async Task<List<EmpleadoModel>> Obtener(IdentificadorModel model=null)
+		public async Task<List<DTOEmpleadoUsr>> Obtener(IdentificadorModel model=null)
 		{
 			using (SqlConnection sql = new SqlConnection(_connectionString))
 			{
@@ -22,7 +23,7 @@ namespace bad115_api_core.Repository
 				{
 					cmd.CommandType = System.Data.CommandType.StoredProcedure;
 					cmd.Parameters.Add(new SqlParameter("@p_id", (model != null) ? model.id : null));
-					var response = new List<EmpleadoModel>();
+					var response = new List<DTOEmpleadoUsr>();
 					await sql.OpenAsync();
 					using (var reader = await cmd.ExecuteReaderAsync())
 					{
@@ -57,16 +58,17 @@ namespace bad115_api_core.Repository
 				}
 			}
 		}
-		private EmpleadoModel MapToValueEmpleado(SqlDataReader reader)
+		private DTOEmpleadoUsr MapToValueEmpleado(SqlDataReader reader)
 		{
-			return new EmpleadoModel
+			return new DTOEmpleadoUsr
 			{
 				Activo = Convert.ToBoolean(reader["ACTIVO"]),
 				Fecha_deserto = Convert.ToDateTime(reader["FECHA_DESERTO"]),
 				Fecha_inicio = Convert.ToDateTime(reader["FECHA_INICIO"]),
 				Idempleado = Convert.ToInt32(reader["IDEMPLEADO"]),
 				Modificado_en = Convert.ToDateTime(reader["MODIFICADO_EN"]),
-				Modificado_por = Convert.ToInt32(reader["MODIFICADO_POR"])
+				Modificado_por = Convert.ToInt32(reader["MODIFICADO_POR"]),
+				nombre = Convert.ToString(reader["NOMBRE"])
 			};
 		}
 	}

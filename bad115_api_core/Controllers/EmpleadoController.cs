@@ -1,4 +1,5 @@
 ﻿using bad115_api_core.Models;
+using bad115_api_core.Models.DTO;
 using bad115_api_core.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace bad115_api_core.Controllers
 			_repo = repository;
 		}
 		[HttpPost("[action]")]
-		public async Task<List<EmpleadoModel>> Obtener([FromBody] IdentificadorModel model = default)
+		public async Task<List<DTOEmpleadoUsr>> Obtener([FromBody] IdentificadorModel model = default)
 		{
 			return await _repo.Obtener(model);
 		}
