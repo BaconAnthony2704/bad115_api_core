@@ -24,6 +24,8 @@ namespace bad115_api_core.Models.DTO
 
         public bool Activo { get; set; }
 
+        public int Cantidad { get; set; }
+
 
 
     }
