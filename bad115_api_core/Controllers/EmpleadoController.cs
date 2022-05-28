@@ -23,7 +23,7 @@ namespace bad115_api_core.Controllers
 			return await _repo.Obtener(model);
 		}
 		[HttpPost("[action]")]
-		public async Task Guardar([FromBody] EmpleadoModel model)
+		public async Task Guardar([FromBody] DTOEmpleadoUsr model)
 		{
 			await _repo.Guardar(model);
 		}

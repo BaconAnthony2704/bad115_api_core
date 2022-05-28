@@ -38,7 +38,7 @@ namespace bad115_api_core.Repository
 		}
 
 
-		public async Task Guardar(EmpleadoModel model)
+		public async Task Guardar(DTOEmpleadoUsr model)
 		{
 			using (SqlConnection sql = new SqlConnection(_connectionString))
 			{
@@ -51,6 +51,8 @@ namespace bad115_api_core.Repository
 					cmd.Parameters.Add(new SqlParameter("@p_IDEMPLEADO", model.Idempleado));
 					cmd.Parameters.Add(new SqlParameter("@p_MODIFICADO_EN", model.Modificado_en));
 					cmd.Parameters.Add(new SqlParameter("@p_MODIFICADO_POR", model.Modificado_por));
+					cmd.Parameters.Add(new SqlParameter("@p_NOMBRE", model.nombre));
+
 					var response = new List<EmpleadoModel>();
 					await sql.OpenAsync();
 					await cmd.ExecuteNonQueryAsync();
