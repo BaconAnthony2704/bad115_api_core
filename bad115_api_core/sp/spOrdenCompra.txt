@@ -1,34 +1,45 @@
-﻿CREATE PROCEDURE spOrden_compra_ver
-@p_id AS BIGINT=NULL
-AS
-BEGIN
-	IF EXISTS(SELECT * FROM ORDEN_COMPRA WHERE ID_ORDEN_COMPRA=@p_id)
-		SELECT * FROM ORDEN_COMPRA WHERE ID_ORDEN_COMPRA=@p_id
-	ELSE
-		SELECT * FROM ORDEN_COMPRA
-END
-
-CREATE PROCEDURE spOrden_compra_guardar
-	@p_ACTIVO AS BIT      ,
-	@p_APROBADA_POR AS INT      ,
-	@p_FECHA_APROBACION AS DATETIME      ,
-	@p_FECHA_ENTREGA AS DATETIME      ,
-	@p_FECHA_ORDEN AS DATETIME      ,
-	@p_FECHA_REVISION AS DATETIME      ,
+﻿CREATE PROCEDURE spOrden_compra_guardar
+	@p_ACTIVO AS BIT     =1 ,
+	@p_APROBADA_POR AS INT   =-1   ,
+	@p_FECHA_APROBACION AS DATETIME=  null   ,
+	@p_FECHA_ENTREGA AS DATETIME  =null    ,
+	@p_FECHA_ORDEN AS DATETIME     =null,
+	@p_FECHA_REVISION AS DATETIME  =null    ,
 	@p_ID_EMPRESA AS INT      ,
 	@p_ID_ORDEN_COMPRA AS INT      ,
 	@p_ID_PROVEEDOR AS INT      ,
 	@p_IDREQUISICION AS INT      ,
-	@p_MODIFICADO_EN AS DATETIME      ,
-	@p_MODIFICADO_POR AS INT      ,
+	@p_MODIFICADO_EN AS DATETIME   =null  ,
+	@p_MODIFICADO_POR AS INT   =-1   ,
 	@p_NUMERO_ORDEN AS VARCHAR  ( 10 ) = NULL ,
 	@p_OBSERVACIONES AS VARCHAR  ( 500 ) = NULL ,
-	@p_REVISADO_POR AS INT      
+	@p_REVISADO_POR AS INT      =-1
 AS
 BEGIN
-
+	
+	
+	
 	 IF (@p_ID_ORDEN_COMPRA=-1)
 	BEGIN
+		declare @correlativo as int=0
+		select @correlativo=count(o.ID_ORDEN_COMPRA) from ORDEN_COMPRA o;
+		if (@correlativo=0)
+			select @correlativo=1
+		else
+			select @correlativo=@correlativo+1
+		--Creamos una tabla temporal para obtener los detalle de la requisicion
+		select det.* 
+		into #detalleTmp
+		from DETALLEREQUISICION det 
+		where det.IDREQUISICION=@p_IDREQUISICION
+
+		--Obtenemos el precio unitario del producto de la requisicion
+		select p.* 
+		into #productoReqTmp
+		from PRODUCTO p
+		inner join #detalleTmp t on t.ID_PRODUCTO=p.ID_PRODUCTO 
+
+		--Insertamos orden de compra
 		INSERT INTO ORDEN_COMPRA (
 		 ACTIVO ,
 		 APROBADA_POR ,
@@ -47,19 +58,45 @@ BEGIN
 		) VALUES (
 		 @p_ACTIVO, 
 		 @p_APROBADA_POR, 
-		 @p_FECHA_APROBACION, 
-		 @p_FECHA_ENTREGA, 
-		 @p_FECHA_ORDEN, 
-		 @p_FECHA_REVISION, 
+		 case when @p_FECHA_APROBACION is null then cast('01-01-1900' as datetime) else @p_FECHA_APROBACION end, 
+		 case when @p_FECHA_ENTREGA is null then cast('01-01-1900' as datetime) else @p_FECHA_ENTREGA end, 
+		 case when @p_FECHA_ORDEN is null then getdate() else @p_FECHA_ORDEN end, 
+		 case when @p_FECHA_REVISION is null then cast('01-01-1900' as datetime) else @p_FECHA_REVISION end,
 		 @p_ID_EMPRESA, 
 		 @p_ID_PROVEEDOR, 
 		 @p_IDREQUISICION, 
-		 @p_MODIFICADO_EN, 
+		 case when @p_MODIFICADO_EN is null then cast('01-01-1900' as datetime) else @p_MODIFICADO_EN end, 
 		 @p_MODIFICADO_POR, 
-		 @p_NUMERO_ORDEN, 
-		 @p_OBSERVACIONES, 
+		 case when @p_NUMERO_ORDEN is null then CONCAT('OR-',@correlativo) else @p_NUMERO_ORDEN end, 
+		 case when @p_OBSERVACIONES is null then 'No presenta observaciones' else @p_OBSERVACIONES end, 
 		 @p_REVISADO_POR 
 		)
+
+		
+
+		--creamos una vista asignada a los detalles que se van a guardar en el detalle de compra
+		select 
+		cast(@@IDENTITY as int) ID_ORDEN_COMPRA
+		,1 ACTIVO
+		,GETDATE() FECHA_CREACION
+		,(select top 1 d.ID_DIVISAS from DIVISAS d) ID_DIVISAS
+		,@correlativo NUMERO_DETALLE
+		,dt.CANTIDAD CANTIDAD
+		,pt.PRECIO_MINIMO PRECIO_UNITARIO
+		,(dt.CANTIDAD*pt.PRECIO_MINIMO) VALOR_TOTAL
+		,GETDATE() MODIFICADO_EN
+		,-1 MODIFICADO_POR
+		into #vistaPreviaDetalleOrdenTmp
+		From #detalleTmp dt
+		inner join #productoReqTmp pt on pt.ID_PRODUCTO=dt.ID_PRODUCTO
+
+		--asignamos los valores de la requisicion a la tabla detalleOrdenCompra
+		insert DETALLE_ORDEN_COMPRA
+		(ID_ORDEN_COMPRA,ACTIVO,FECHA_CREACION,ID_DIVISAS,NUMERO_DETALLE,CANTIDAD,PRECIO_UNITARIO,VALOR_TOTAL,MODIFICADO_EN,MODIFICADO_POR)
+		(
+		select * from #vistaPreviaDetalleOrdenTmp
+		)
+
 	END
 
 	ELSE
