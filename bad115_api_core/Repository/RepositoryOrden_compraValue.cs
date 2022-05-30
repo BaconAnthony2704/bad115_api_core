@@ -1,4 +1,5 @@
 ﻿using bad115_api_core.Models;
+using bad115_api_core.Models.DTO;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace bad115_api_core.Repository
 		{
 			_connectionString = configuration.GetConnectionString("Conexion");
 		}
-		public async Task<List<Orden_compraModel>> Obtener(IdentificadorModel model=null)
+		public async Task<List<DTOrdenCompraModel>> Obtener(IdentificadorModel model=null)
 		{
 			using (SqlConnection sql = new SqlConnection(_connectionString))
 			{
@@ -22,7 +23,7 @@ namespace bad115_api_core.Repository
 				{
 					cmd.CommandType = System.Data.CommandType.StoredProcedure;
 					cmd.Parameters.Add(new SqlParameter("@p_id", (model != null) ? model.id : null));
-					var response = new List<Orden_compraModel>();
+					var response = new List<DTOrdenCompraModel>();
 					await sql.OpenAsync();
 					using (var reader = await cmd.ExecuteReaderAsync())
 					{
@@ -66,9 +67,9 @@ namespace bad115_api_core.Repository
 				}
 			}
 		}
-		private Orden_compraModel MapToValueOrden_compra(SqlDataReader reader)
+		private DTOrdenCompraModel MapToValueOrden_compra(SqlDataReader reader)
 		{
-			return new Orden_compraModel
+			return new DTOrdenCompraModel
 			{
 				Activo = Convert.ToBoolean(reader["ACTIVO"]),
 				Aprobada_por = Convert.ToInt32(reader["APROBADA_POR"]),
@@ -84,7 +85,11 @@ namespace bad115_api_core.Repository
 				Modificado_por = Convert.ToInt32(reader["MODIFICADO_POR"]),
 				Numero_orden = reader["NUMERO_ORDEN"].ToString(),
 				Observaciones = reader["OBSERVACIONES"].ToString(),
-				Revisado_por = Convert.ToInt32(reader["REVISADO_POR"])
+				Revisado_por = Convert.ToInt32(reader["REVISADO_POR"]),
+				FechaLimite= Convert.ToDateTime(reader["FECHALIMITE"]),
+				Nombre_empresa= reader["NOMBRE_EMPRESA"].ToString(),
+				Nombre_proveedor= reader["NOMBRE_PROVEEDOR"].ToString(),
+				NRC= reader["NRC"].ToString()
 			};
 		}
 	}

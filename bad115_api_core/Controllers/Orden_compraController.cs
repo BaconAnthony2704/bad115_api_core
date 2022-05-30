@@ -1,4 +1,5 @@
 ﻿using bad115_api_core.Models;
+using bad115_api_core.Models.DTO;
 using bad115_api_core.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace bad115_api_core.Controllers
 			_repo = repository;
 		}
 		[HttpPost("[action]")]
-		public async Task<List<Orden_compraModel>> Obtener([FromBody] IdentificadorModel model = default)
+		public async Task<List<DTOrdenCompraModel>> Obtener([FromBody] IdentificadorModel model = default)
 		{
 			return await _repo.Obtener(model);
 		}
